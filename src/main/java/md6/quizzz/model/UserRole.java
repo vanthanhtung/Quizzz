@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class User_Role {
+public class UserRole {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;

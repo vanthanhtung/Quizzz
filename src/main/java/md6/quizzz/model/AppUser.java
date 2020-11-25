@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class App_User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -19,5 +19,5 @@ public class App_User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    private User_Role role;
+    private UserRole role;
 }

@@ -17,7 +17,7 @@ public class Record {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "app_user_id")
-    private App_User app_user;
+    private AppUser app_user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exam_id")

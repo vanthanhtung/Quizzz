@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Record_Answer {
+public class RecordAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,5 +18,5 @@ public class Record_Answer {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "quiz_answer_id")
-    private Quiz_Answer quiz_answer;
+    private QuizAnswer quiz_answer;
 }
