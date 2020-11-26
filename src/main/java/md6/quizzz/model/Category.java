@@ -3,10 +3,7 @@ package md6.quizzz.model;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -16,6 +13,7 @@ public class Category {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     public Long getId() {

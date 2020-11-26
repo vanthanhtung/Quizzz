@@ -12,4 +12,6 @@ public interface ExamService {
     void save(Exam exam);
 
     void deleteById(Long id);
+
+    boolean validate(Exam exam);
 }
