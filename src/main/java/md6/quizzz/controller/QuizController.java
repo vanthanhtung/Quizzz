@@ -1,5 +1,6 @@
 package md6.quizzz.controller;
 
+import md6.quizzz.model.Category;
 import md6.quizzz.model.Quiz;
 import md6.quizzz.repository.QuizRepository;
 import md6.quizzz.service.categoryService.CategoryService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,4 +42,11 @@ public class QuizController {
         quizService.save(quiz);
         return new ResponseEntity<>(quiz, HttpStatus.CREATED);
     }
+
+    @GetMapping("/categories/{name}")
+    public ResponseEntity<List<Quiz>> getAllByCategory_Name(@PathVariable String name){
+        return new ResponseEntity<>(quizService.findAllByCategory_Name(name), HttpStatus.OK);
+    }
+
+
 }
