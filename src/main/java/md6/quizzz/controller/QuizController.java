@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,8 @@ public class QuizController {
 
     @PostMapping()
     public ResponseEntity<Quiz> add(@RequestBody Quiz quiz){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        quiz.setCreate_at(timestamp);
         quizService.save(quiz);
         return new ResponseEntity<>(quiz, HttpStatus.CREATED);
     }
