@@ -20,6 +20,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
+@PreAuthorize("hasRole('ADMIN')")
 public class AppUserController {
 
     final long idRoleAdmin =1;

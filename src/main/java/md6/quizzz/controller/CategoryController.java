@@ -13,12 +13,13 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/categories")
+@PreAuthorize("hasRole('ADMIN')")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Iterable<Category>> findAll(){
         return new ResponseEntity<>(categoryService.getAll(), HttpStatus.OK);
     }
@@ -29,7 +30,6 @@ public class CategoryController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> save(@RequestBody Category category) {
         if (categoryService.validate(category)) {
             categoryService.save(category);return new ResponseEntity<>(category, HttpStatus.CREATED);
