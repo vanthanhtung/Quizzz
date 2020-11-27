@@ -49,7 +49,7 @@ public class AppUserController {
         currentAppUser.get().setEmail(appUser.getEmail());
         currentAppUser.get().setImage(appUser.getImage());
         currentAppUser.get().setPassword(appUser.getPassword());
-        currentAppUser.get().setRole(appUser.getRole());
+        currentAppUser.get().setRoles(appUser.getRoles());
         currentAppUser.get().setUsername(appUser.getUsername());
         appUserService.save(currentAppUser.get());
         return new ResponseEntity<>(currentAppUser.get(), HttpStatus.OK);

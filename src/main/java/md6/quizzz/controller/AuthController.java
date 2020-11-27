@@ -5,9 +5,9 @@ import md6.quizzz.dto.JwtResponse;
 import md6.quizzz.dto.LoginRequest;
 import md6.quizzz.dto.MessageResponse;
 import md6.quizzz.dto.SignupRequest;
-import md6.quizzz.model.App_User;
+import md6.quizzz.model.AppUser;
 import md6.quizzz.model.ERole;
-import md6.quizzz.model.User_Role;
+import md6.quizzz.model.UserRole;
 import md6.quizzz.repository.AppUserRepository;
 import md6.quizzz.repository.UserRoleRepository;
 import md6.quizzz.service.UserDetailsImpl;
@@ -74,26 +74,26 @@ public class AuthController {
                     .body(new MessageResponse("Error: Username is already in use!"));
         }
 
-        App_User user =  new App_User(signupRequest.getUsername(),
+        AppUser user =  new AppUser(signupRequest.getUsername(),
                 passwordEncoder.encode(signupRequest.getPassword()));
 
         Set<String> strRoles = signupRequest.getRole();
-        Set<User_Role> roles = new HashSet<>();
+        Set<UserRole> roles = new HashSet<>();
 
         if (strRoles == null) {
-            User_Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            UserRole userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        User_Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        UserRole adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
                         roles.add(adminRole);
                         break;
                     default:
-                        User_Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        UserRole userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
                         roles.add(userRole);
                 }

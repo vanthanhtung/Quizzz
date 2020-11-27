@@ -1,7 +1,7 @@
 package md6.quizzz.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import md6.quizzz.model.App_User;
+import md6.quizzz.model.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +31,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(App_User user) {
+    public static UserDetailsImpl build(AppUser user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());

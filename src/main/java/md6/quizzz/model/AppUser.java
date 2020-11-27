@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class App_User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -24,28 +24,28 @@ public class App_User {
     @JoinTable(	name = "roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<User_Role> roles = new HashSet<>();
+    private Set<UserRole> roles = new HashSet<>();
 
-    public App_User(String username,String email,  String password) {
+    public AppUser(String username, String email, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
     }
 
-    public App_User() {
+    public AppUser() {
 
     }
 
-    public App_User(String username, String password) {
+    public AppUser(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public void setRoles(Set<User_Role> roles) {
+    public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
 
-    public Set<User_Role> getRoles() {
+    public Set<UserRole> getRoles() {
         return roles;
     }
 

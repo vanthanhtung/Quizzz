@@ -1,6 +1,6 @@
 package md6.quizzz.service;
 
-import md6.quizzz.model.App_User;
+import md6.quizzz.model.AppUser;
 import md6.quizzz.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        App_User user = userRepository.findByUsername(username)
+        AppUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return UserDetailsImpl.build(user);
