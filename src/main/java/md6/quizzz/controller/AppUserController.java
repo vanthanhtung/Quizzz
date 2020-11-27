@@ -1,20 +1,30 @@
 package md6.quizzz.controller;
 
 import md6.quizzz.model.AppUser;
+import md6.quizzz.model.ERole;
 import md6.quizzz.model.Exam;
+import md6.quizzz.model.UserRole;
+import md6.quizzz.repository.UserRoleRepository;
 import md6.quizzz.service.appUserService.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
 public class AppUserController {
 
+    final long idRoleAdmin =1;
+    @Autowired
+    UserRoleRepository userRoleRepository;
     @Autowired
     private AppUserService appUserService;
 
@@ -59,5 +69,19 @@ public class AppUserController {
     public ResponseEntity<AppUser> delete(@PathVariable Long id){
         appUserService.remove(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/changeRole/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AppUser> changeRole(@PathVariable Long id){
+        Optional<AppUser> currentAppUser = appUserService.findById(id);
+        if(!currentAppUser.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(userRoleRepository.findById(idRoleAdmin).get());
+        currentAppUser.get().setRoles(roles);
+        appUserService.save(currentAppUser.get());
+        return new ResponseEntity<>(currentAppUser.get(), HttpStatus.OK);
     }
 }
