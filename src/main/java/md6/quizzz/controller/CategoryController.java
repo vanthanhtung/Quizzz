@@ -5,6 +5,7 @@ import md6.quizzz.service.categoryService.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Iterable<Category>> findAll(){
         return new ResponseEntity<>(categoryService.getAll(), HttpStatus.OK);
     }
@@ -27,6 +29,7 @@ public class CategoryController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> save(@RequestBody Category category) {
         if (categoryService.validate(category)) {
             categoryService.save(category);return new ResponseEntity<>(category, HttpStatus.CREATED);
