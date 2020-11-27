@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @RestController
@@ -43,10 +44,11 @@ public class ExamController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Exam> edit(@PathVariable Long id, @RequestBody Exam exam) {
         Optional<Exam> currentExam = examService.findById(id);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         if (!currentExam.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else if (examService.validate(exam)){
-            currentExam.get().setCreated_at(exam.getCreated_at());
+            currentExam.get().setCreated_at(timestamp);
             currentExam.get().setDuration(exam.getDuration());
             currentExam.get().setScore(exam.getScore());
             currentExam.get().setCategory(exam.getCategory());
