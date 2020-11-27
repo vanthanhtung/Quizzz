@@ -1,11 +1,13 @@
 package md6.quizzz.controller;
 
+import md6.quizzz.model.Category;
 import md6.quizzz.model.Quiz;
 import md6.quizzz.service.categoryService.CategoryService;
 import md6.quizzz.service.quizService.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/quizzes")
+
 public class QuizController {
     @Autowired
     QuizService quizService;
@@ -48,4 +51,12 @@ public class QuizController {
     public ResponseEntity<List<Quiz>> getAllByCategory_Name(@PathVariable String name) {
         return new ResponseEntity<>(quizService.findAllByCategory_Name(name), HttpStatus.OK);
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Category> delete(@PathVariable("id") Long id){
+        quizService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
