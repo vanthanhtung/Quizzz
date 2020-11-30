@@ -20,6 +20,7 @@ public class RecordAnswer {
     @NotBlank
     @NotNull
     private String record_answer;
+    private boolean is_correct;
 
 
 
