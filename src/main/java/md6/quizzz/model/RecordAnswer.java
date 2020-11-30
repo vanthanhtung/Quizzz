@@ -1,22 +1,26 @@
 package md6.quizzz.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecordAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "record_id")
-    private Record record;
+    @NotBlank
+    @NotNull
+    private String record_answer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "quiz_answer_id")
-    private QuizAnswer quiz_answer;
+
+
 }

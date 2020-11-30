@@ -41,16 +41,11 @@ public class QuizController {
 
     @PostMapping()
     public ResponseEntity<Quiz> add(@RequestBody Quiz quiz) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        quiz.setCreate_at(timestamp);
         quizService.save(quiz);
         return new ResponseEntity<>(quiz, HttpStatus.CREATED);
     }
 
-    @GetMapping("/categories/{name}")
-    public ResponseEntity<List<Quiz>> getAllByCategory_Name(@PathVariable String name) {
-        return new ResponseEntity<>(quizService.findAllByCategory_Name(name), HttpStatus.OK);
-    }
+
 
 
     @DeleteMapping("/{id}")

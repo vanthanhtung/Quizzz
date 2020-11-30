@@ -50,10 +50,8 @@ public class ExamController {
         if (!currentExam.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else if (examService.validate(exam)){
-            currentExam.get().setCreated_at(timestamp);
             currentExam.get().setDuration(exam.getDuration());
             currentExam.get().setScore(exam.getScore());
-            currentExam.get().setCategory(exam.getCategory());
             examService.save(currentExam.get());
             return new ResponseEntity<>(currentExam.get(), HttpStatus.OK);
         }

@@ -1,6 +1,6 @@
 package md6.quizzz.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +9,9 @@ import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class AppUser {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -17,7 +20,9 @@ public class AppUser {
     private int age;
     private String email;
     private String image;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -32,24 +37,11 @@ public class AppUser {
         this.password = password;
     }
 
-    public AppUser() {
-
-    }
-
     public AppUser(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
 
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
 
-    public Long getId() {
-        return id;
-    }
 }

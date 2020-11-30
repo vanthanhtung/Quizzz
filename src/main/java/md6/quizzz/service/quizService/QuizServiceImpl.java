@@ -24,15 +24,6 @@ public class QuizServiceImpl implements QuizService{
         return quizRepository.findById(id);
     }
 
-    @Override
-    public List<Quiz> findAllByCategory_Name(String name) {
-        return quizRepository.findAllByCategory_Name(name);
-    }
-
-    @Override
-    public Iterable<Quiz> findAllByCategory_Id(Long id) {
-        return quizRepository.findAllByCategory_Id(id);
-    }
 
     @Override
     public void save(Quiz quiz) {

@@ -35,7 +35,6 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public boolean validate(Exam exam) {
-        if (exam.getCategory() == null) return false;
         if (exam.getDuration() <= 0) return false;
         if (exam.getExam_code() == null || exam.getExam_code().equals("")) return false;
         if (exam.getExam_name() == null || exam.getExam_name().equals("")) return false;
