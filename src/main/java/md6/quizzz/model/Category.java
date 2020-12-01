@@ -23,8 +23,8 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Quiz.class, mappedBy = "category")
-    @JsonManagedReference
-    private List<Quiz> quizList;
+//    @OneToMany(targetEntity = Quiz.class, mappedBy = "category")
+////    @JsonManagedReference
+////    private List<Quiz> quizList;
 
 }

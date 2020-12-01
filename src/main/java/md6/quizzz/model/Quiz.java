@@ -37,7 +37,6 @@ public class Quiz {
     private String content;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
     @JoinColumn(name = "category_id")
     private Category category;
 
