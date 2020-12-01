@@ -2,7 +2,9 @@ package md6.quizzz.controller;
 
 import md6.quizzz.model.Category;
 import md6.quizzz.model.Quiz;
+import md6.quizzz.model.QuizAnswer;
 import md6.quizzz.service.categoryService.CategoryService;
+import md6.quizzz.service.quizAnswerService.QuizAnswerService;
 import md6.quizzz.service.quizService.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class QuizController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    QuizAnswerService quizAnswerService;
+
     @GetMapping()
     public ResponseEntity<Iterable<Quiz>> getAll() {
         return new ResponseEntity<>(quizService.getAll(), HttpStatus.OK);
@@ -41,13 +46,22 @@ public class QuizController {
 
     @PostMapping()
     public ResponseEntity<Quiz> add(@RequestBody Quiz quiz) {
-        quiz.set_active(true);
         quizService.save(quiz);
+        List<QuizAnswer> quizAnswerList = quiz.getAnswers();
+        for(QuizAnswer x: quizAnswerList){
+            x.setQuiz(quiz);
+            quizAnswerService.save(x);
+        }
         return new ResponseEntity<>(quiz, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Quiz> delete(@PathVariable("id") Long id){
+        Quiz quiz = quizService.getById(id).get();
+        List<QuizAnswer> quizAnswerList = quiz.getAnswers();
+        for(QuizAnswer x: quizAnswerList){
+            quizAnswerService.deleteById(x.getId());
+        }
         quizService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

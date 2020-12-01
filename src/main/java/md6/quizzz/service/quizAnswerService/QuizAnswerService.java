@@ -13,4 +13,5 @@ public interface QuizAnswerService {
     void save(QuizAnswer quizAnswer);
 
     void deleteById(Long id);
+
 }

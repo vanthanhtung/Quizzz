@@ -1,5 +1,6 @@
 package md6.quizzz.service.quizAnswerService;
 
+import md6.quizzz.model.Quiz;
 import md6.quizzz.model.QuizAnswer;
 import md6.quizzz.repository.QuizAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,5 @@ public class QuizAnswerServiceImpl implements QuizAnswerService{
     public void deleteById(Long id) {
         quizAnswerRepository.deleteById(id);
     }
+
 }
