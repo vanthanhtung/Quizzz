@@ -9,7 +9,7 @@ public interface ExamService {
 
     Optional<Exam> findById(Long id);
 
-    void save(Exam exam);
+    Exam save(Exam exam);
 
     void deleteById(Long id);
 

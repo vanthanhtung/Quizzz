@@ -20,7 +20,7 @@ public class Exam {
     private Long id;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean is_release = true;
+    private Boolean enabled = true;
 
     private int duration;
 
@@ -35,9 +35,8 @@ public class Exam {
     private double score;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    List<Quiz> quizSet;
-
+    Set<Quiz> quizSet;
 }

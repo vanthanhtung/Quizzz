@@ -24,9 +24,9 @@ public class Record {
     @JoinColumn(name = "app_user_id")
     private AppUser app_user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "exam_id")
-    private Exam exam;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "exam_id")
+//    private Exam exam;
 
     @OneToMany
     @JoinColumn(name = "record_answer_id")
