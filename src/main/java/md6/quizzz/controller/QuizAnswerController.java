@@ -16,7 +16,6 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/answers")
-@PreAuthorize("hasRole('ADMIN')")
 public class QuizAnswerController {
     @Autowired
     QuizAnswerService quizAnswerService;

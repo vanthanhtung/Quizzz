@@ -1,5 +1,6 @@
 package md6.quizzz.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.*;
@@ -23,8 +24,8 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-//    @OneToMany(targetEntity = Quiz.class, mappedBy = "category")
-////    @JsonManagedReference
-////    private List<Quiz> quizList;
+    @OneToMany(targetEntity = Quiz.class, mappedBy = "category")
+    @JsonIgnoreProperties("category")
+    private List<Quiz> quizList;
 
 }

@@ -1,6 +1,7 @@
 package md6.quizzz.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class QuizAnswer {
     private boolean is_correct;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
     @JoinColumn(name = "quiz_id")
+    @JsonIgnoreProperties("answers")
     private Quiz quiz;
 }

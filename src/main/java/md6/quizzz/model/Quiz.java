@@ -1,6 +1,7 @@
 package md6.quizzz.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -38,9 +39,10 @@ public class Quiz {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties("quizes")
     private Category category;
 
     @OneToMany(targetEntity = QuizAnswer.class, mappedBy = "quiz")
-    @JsonManagedReference
+    @JsonIgnoreProperties("quiz")
     private List<QuizAnswer> answers;
 }
