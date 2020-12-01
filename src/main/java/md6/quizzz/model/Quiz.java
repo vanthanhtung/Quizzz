@@ -39,7 +39,7 @@ public class Quiz {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnoreProperties("quizes")
+    @JsonIgnoreProperties("quizList")
     private Category category;
 
     @OneToMany(targetEntity = QuizAnswer.class, mappedBy = "quiz")
