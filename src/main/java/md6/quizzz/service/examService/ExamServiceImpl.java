@@ -5,7 +5,6 @@ import md6.quizzz.repository.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @Service
@@ -15,7 +14,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Iterable<Exam> findAll() {
-        return examRepository.findAll();
+        return examRepository.findByEnabledIsTrue();
     }
 
     @Override
@@ -24,8 +23,9 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void save(Exam exam) {
+    public Exam save(Exam exam) {
         examRepository.save(exam);
+        return exam;
     }
 
     @Override

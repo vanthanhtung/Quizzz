@@ -5,7 +5,10 @@ import md6.quizzz.service.examService.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -20,12 +23,14 @@ public class ExamController {
     ExamService examService;
 
     @GetMapping()
-    public ResponseEntity<Iterable<Exam>> findAll() {
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    public ResponseEntity<?> findAll() {
         return new ResponseEntity<>(examService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Exam>> findById(@PathVariable Long id) {
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Exam> exam = examService.findById(id);
         if (!exam.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -34,33 +39,35 @@ public class ExamController {
     }
 
     @PostMapping()
-    public ResponseEntity<Exam> save(@RequestBody Exam exam) {
-        if (examService.validate(exam)) {
-            examService.save(exam);
-            return new ResponseEntity<>(exam, HttpStatus.CREATED);
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<?> save(@Validated @RequestBody Exam exam, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-
+        examService.save(exam);
+        return new ResponseEntity<>(exam, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Exam> edit(@PathVariable Long id, @RequestBody Exam exam) {
-        Optional<Exam> currentExam = examService.findById(id);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        if (!currentExam.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }else if (examService.validate(exam)){
-            currentExam.get().setDuration(exam.getDuration());
-            currentExam.get().setScore(exam.getScore());
-            examService.save(currentExam.get());
-            return new ResponseEntity<>(currentExam.get(), HttpStatus.OK);
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<?> edit(@PathVariable Long id, @Validated @RequestBody Exam exam, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
-        else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        Optional<Exam> currentTest = examService.findById(id);
+        if (currentTest.isPresent()) {
+            currentTest.get().setEnabled(false);
+            Exam examSaved = examService.save(exam);
+            return new ResponseEntity<>(examSaved, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(currentTest, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Exam> delete(@PathVariable Long id) {
-        examService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Optional<Exam> currentTest = examService.findById(id);
+        currentTest.ifPresent(exam -> exam.setEnabled(false));
+        return new ResponseEntity<>(currentTest, HttpStatus.OK);
     }
 }
