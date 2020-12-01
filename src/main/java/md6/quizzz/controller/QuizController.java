@@ -41,6 +41,7 @@ public class QuizController {
 
     @PostMapping()
     public ResponseEntity<Quiz> add(@RequestBody Quiz quiz) {
+        quiz.set_active(true);
         quizService.save(quiz);
         return new ResponseEntity<>(quiz, HttpStatus.CREATED);
     }
