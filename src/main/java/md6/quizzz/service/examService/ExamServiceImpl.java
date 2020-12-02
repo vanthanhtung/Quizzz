@@ -1,16 +1,23 @@
 package md6.quizzz.service.examService;
 
 import md6.quizzz.model.Exam;
+import md6.quizzz.model.ExamRequest;
+import md6.quizzz.model.Quiz;
 import md6.quizzz.repository.ExamRepository;
+import md6.quizzz.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ExamServiceImpl implements ExamService {
     @Autowired
     ExamRepository examRepository;
+
+    @Autowired
+    QuizRepository quizRepository;
 
     @Override
     public Iterable<Exam> findAll() {
@@ -26,6 +33,26 @@ public class ExamServiceImpl implements ExamService {
     public Exam save(Exam exam) {
         examRepository.save(exam);
         return exam;
+    }
+
+    @Override
+    @Transactional
+    public Exam save(ExamRequest examRequest) {
+        Exam currentExam = new Exam();
+        currentExam.setDuration(examRequest.getDuration());
+        currentExam.setEnabled(examRequest.getEnabled());
+        currentExam.setExam_code(examRequest.getExam_code());
+        currentExam.setExam_name(examRequest.getExam_name());
+        int numberOfQuiz = examRequest.getNumberOfQuiz();
+        List<Quiz> list = quizRepository.findAll();
+        Set<Quiz> realQuizList = new HashSet<>();
+
+        while (realQuizList.size() < numberOfQuiz) {
+            int randomIndex = (int) Math.floor(Math.random()*list.size());
+            realQuizList.add(list.get(randomIndex));
+        }
+        currentExam.setQuizSet(realQuizList);
+        return examRepository.save(currentExam);
     }
 
     @Override

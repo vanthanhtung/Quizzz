@@ -1,5 +1,6 @@
 package md6.quizzz.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
+@ToString(exclude = {"quizList"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +25,9 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Quiz.class, mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("category")
+    @JsonBackReference
     private List<Quiz> quizList;
 
 }

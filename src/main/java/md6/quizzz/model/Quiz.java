@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"category", "answers"})
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,18 +38,15 @@ public class Quiz {
     @NotNull
     private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties("quizList")
+    @JsonManagedReference
     private Category category;
 
     @OneToMany(targetEntity = QuizAnswer.class, mappedBy = "quiz")
     @JsonIgnoreProperties("quiz")
     private List<QuizAnswer> answers;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "quiz_exam",
-//            joinColumns = { @JoinColumn(name = "exam_id") },
-//            inverseJoinColumns = {@JoinColumn(name = "quiz_id") })
-//    private List<Exam> exam;
+
 }
