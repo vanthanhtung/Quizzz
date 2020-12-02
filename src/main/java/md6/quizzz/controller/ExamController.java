@@ -1,6 +1,7 @@
 package md6.quizzz.controller;
 
 import md6.quizzz.model.Exam;
+import md6.quizzz.model.ExamRequest;
 import md6.quizzz.service.examService.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,16 @@ public class ExamController {
         }
         examService.save(exam);
         return new ResponseEntity<>(exam, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/create")
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<?> save(@Validated @RequestBody ExamRequest examRequest, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+        examService.save(examRequest);
+        return new ResponseEntity<>(examRequest, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")

@@ -33,7 +33,8 @@ public class QuizController {
 
     @GetMapping()
     public ResponseEntity<Iterable<Quiz>> getAll() {
-        return new ResponseEntity<>(quizService.getAll(), HttpStatus.OK);
+        Iterable<Quiz> list = quizService.getAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -14,4 +14,6 @@ public interface CategoryService {
     void deleteById(Long id);
 
     boolean validate(Category category);
+
+    Optional<Category> findByName(String name);
 }
