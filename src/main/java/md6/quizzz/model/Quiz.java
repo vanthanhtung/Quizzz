@@ -45,4 +45,14 @@ public class Quiz {
     @OneToMany(targetEntity = QuizAnswer.class, mappedBy = "quiz")
     @JsonIgnoreProperties("quiz")
     private List<QuizAnswer> answers;
+
+    @OneToMany(targetEntity = RecordAnswer.class, mappedBy = "quiz")
+    @JsonIgnoreProperties("quiz")
+    private List<RecordAnswer> recordAnswers;
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "quiz_exam",
+//            joinColumns = { @JoinColumn(name = "exam_id") },
+//            inverseJoinColumns = {@JoinColumn(name = "quiz_id") })
+//    private List<Exam> exam;
 }
