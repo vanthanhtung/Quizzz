@@ -25,9 +25,8 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Quiz.class, mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("category")
-    @JsonBackReference
     private List<Quiz> quizList;
 
 }

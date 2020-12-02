@@ -1,8 +1,10 @@
 package md6.quizzz.service.examService;
 
+import md6.quizzz.model.Category;
 import md6.quizzz.model.Exam;
 import md6.quizzz.model.ExamRequest;
 import md6.quizzz.model.Quiz;
+import md6.quizzz.repository.CategoryRepository;
 import md6.quizzz.repository.ExamRepository;
 import md6.quizzz.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     QuizRepository quizRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     public Iterable<Exam> findAll() {
@@ -44,7 +49,9 @@ public class ExamServiceImpl implements ExamService {
         currentExam.setExam_code(examRequest.getExam_code());
         currentExam.setExam_name(examRequest.getExam_name());
         int numberOfQuiz = examRequest.getNumberOfQuiz();
-        List<Quiz> list = quizRepository.findAll();
+
+        Category category = categoryRepository.findByName(examRequest.getCategory()).get();
+        List<Quiz> list = (List<Quiz>) quizRepository.findByCategory(category);
         Set<Quiz> realQuizList = new HashSet<>();
 
         while (realQuizList.size() < numberOfQuiz) {

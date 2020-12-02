@@ -47,6 +47,4 @@ public class Quiz {
     @OneToMany(targetEntity = QuizAnswer.class, mappedBy = "quiz")
     @JsonIgnoreProperties("quiz")
     private List<QuizAnswer> answers;
-
-
 }

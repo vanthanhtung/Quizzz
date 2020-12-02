@@ -39,4 +39,9 @@ public class CategoryServiceImpl implements CategoryService{
         }
         return category.getName() != null && !category.getName().equals("");
     }
+
+    @Override
+    public Optional<Category> findByName(String name) {
+        return categoryRepository.findByName(name);
+    }
 }
