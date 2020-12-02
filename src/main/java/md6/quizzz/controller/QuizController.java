@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -45,7 +46,7 @@ public class QuizController {
     }
 
     @PostMapping()
-    public ResponseEntity<Quiz> add(@RequestBody Quiz quiz) {
+    public ResponseEntity<Quiz> add(@Validated @RequestBody Quiz quiz) {
         quizService.save(quiz);
         List<QuizAnswer> quizAnswerList = quiz.getAnswers();
         for(QuizAnswer x: quizAnswerList){

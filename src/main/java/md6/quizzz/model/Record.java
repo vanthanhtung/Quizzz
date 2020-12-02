@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -22,13 +23,13 @@ public class Record {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "app_user_id")
-    private AppUser app_user;
+    private AppUser appUser;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "exam_id")
-//    private Exam exam;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "exam_id")
+    private Exam exam;
 
     @OneToMany
     @JoinColumn(name = "record_answer_id")
-    private List<RecordAnswer> recordAnswers;
+    private Set<RecordAnswer> recordAnswers;
 }

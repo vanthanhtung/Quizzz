@@ -46,6 +46,10 @@ public class Quiz {
     @JsonIgnoreProperties("quiz")
     private List<QuizAnswer> answers;
 
+    @OneToMany(targetEntity = RecordAnswer.class, mappedBy = "quiz")
+    @JsonIgnoreProperties("quiz")
+    private List<RecordAnswer> recordAnswers;
+
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(name = "quiz_exam",
 //            joinColumns = { @JoinColumn(name = "exam_id") },
