@@ -14,10 +14,10 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/exams")
-@PreAuthorize("hasRole('ADMIN')")
 public class ExamController {
     @Autowired
     ExamService examService;
+
 
     @GetMapping()
     public ResponseEntity<Iterable<Exam>> findAll() {
