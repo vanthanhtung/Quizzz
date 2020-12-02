@@ -18,9 +18,6 @@ public class RecordAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @NotNull
-    private String record_answer;
     private boolean is_correct;
 
 

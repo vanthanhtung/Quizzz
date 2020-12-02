@@ -1,6 +1,7 @@
 package md6.quizzz.controller;
 
 import lombok.RequiredArgsConstructor;
+import md6.quizzz.dto.RecordRequest;
 import md6.quizzz.model.*;
 import md6.quizzz.model.Record;
 import md6.quizzz.repository.RecordAnswerRepository;
@@ -60,10 +61,23 @@ public class RecordController {
     @PostMapping
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @Transactional
-    public ResponseEntity<Record> create(@RequestBody Record record) {
-        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<AppUser> currUser = appUserService.findByUsername(principal.getName());
-        Optional<Exam> currExam = examService.findById(record.getExam().getId());
+    public ResponseEntity<Record> create(@RequestBody RecordRequest recordRequest) {
+//        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Optional<AppUser> currUser = appUserService.findByUsername(principal.getName());
+        Optional<Exam> currExam = examService.findById(recordRequest.getExam().getId());
+        Record record = new Record();
+        record.setExam(currExam.get());
+        record.setRecordAnswers(new HashSet<>());
+        recordRequest.getRecordAnswer().forEach(m -> {
+            QuizAnswer quizAnswer = quizAnswerService.getById(m).get();
+            RecordAnswer recordAnswer = new RecordAnswer();
+            recordAnswer.set_correct(quizAnswer.is_correct());
+            recordAnswer.setQuiz(quizAnswer.getQuiz());
+            quizAnswer.getQuiz().getRecordAnswers().add(recordAnswer);
+            record.getRecordAnswers().add(recordAnswer);
+        });
+
+
         Set<RecordAnswer> recordAnswers = record.getRecordAnswers();
         double lengthExam = currExam.get().getQuizSet().size();
         double correctCount = currExam.get().getScore() / lengthExam;
@@ -71,7 +85,9 @@ public class RecordController {
 
         for (Quiz quiz : currExam.get().getQuizSet()) {
             boolean onlyCorrect = quiz.getType() != 2;
-            if (onlyCorrect && quiz.getRecordAnswers().get(0).is_correct()) {
+            if (onlyCorrect) {
+                RecordAnswer recordAnswer = quiz.getRecordAnswers().stream().filter(m-> m.getId() == null).findFirst().get();
+                if (!recordAnswer.is_correct()) continue;
                 recordPoint += correctCount;
             } else {
                 int correctOneCount = 0;
@@ -83,8 +99,10 @@ public class RecordController {
         }
 
         record.setScore(recordPoint);
-        record.setAppUser(currUser.get());recordService.save(record);
-        recordAnswerRepository.saveAll(record.getRecordAnswers());
+//        record.setAppUser(currUser.get());
+        recordService.save(record);
+        Set<RecordAnswer> list = record.getRecordAnswers();
+        recordAnswerRepository.saveAll(list);
 
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }

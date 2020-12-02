@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"category", "answers"})
+@ToString(exclude = {"category", "answers", "recordAnswers"})
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
