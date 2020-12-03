@@ -12,4 +12,5 @@ public class ExamRequest {
     private String exam_name;
     private int numberOfQuiz;
     private String category;
+    private double score;
 }

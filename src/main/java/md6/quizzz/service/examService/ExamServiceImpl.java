@@ -48,6 +48,7 @@ public class ExamServiceImpl implements ExamService {
         currentExam.setEnabled(examRequest.getEnabled());
         currentExam.setExam_code(examRequest.getExam_code());
         currentExam.setExam_name(examRequest.getExam_name());
+        currentExam.setScore(examRequest.getScore());
         int numberOfQuiz = examRequest.getNumberOfQuiz();
 
         Category category = categoryRepository.findByName(examRequest.getCategory()).get();
