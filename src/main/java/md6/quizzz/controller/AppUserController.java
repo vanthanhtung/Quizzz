@@ -5,15 +5,19 @@ import md6.quizzz.model.ERole;
 import md6.quizzz.model.Exam;
 import md6.quizzz.model.UserRole;
 import md6.quizzz.repository.UserRoleRepository;
+import md6.quizzz.service.UserDetailsImpl;
 import md6.quizzz.service.appUserService.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -90,5 +94,24 @@ public class AppUserController {
         currentAppUser.get().setRoles(roles);
         appUserService.save(currentAppUser.get());
         return new ResponseEntity<>(currentAppUser.get(), HttpStatus.OK);
+    }
+
+    @PutMapping("/changePassword")
+    @Secured({"ROLE_USER"})
+    public ResponseEntity<AppUser> changePassword(@RequestBody AppUser user){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<AppUser> currentUser = appUserService.findById(userDetails.getId());
+        if (!currentUser.isPresent()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        currentUser.get().setPassword(user.getPassword());
+        appUserService.save(currentUser.get());
+        return new ResponseEntity<>(currentUser.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/profile")
+    @Secured({"ROLE_USER"})
+    public ResponseEntity<AppUser> getUser(){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<AppUser> currentUser = appUserService.findById(userDetails.getId());
+        return currentUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 }
