@@ -1,10 +1,13 @@
 package md6.quizzz.controller;
 
 import lombok.RequiredArgsConstructor;
+import md6.quizzz.dto.LoginRequest;
 import md6.quizzz.dto.RecordRequest;
 import md6.quizzz.model.*;
 import md6.quizzz.model.Record;
 import md6.quizzz.repository.RecordAnswerRepository;
+import md6.quizzz.service.UserDetailsImpl;
+import md6.quizzz.service.UserDetailsServiceImpl;
 import md6.quizzz.service.appUserService.AppUserService;
 import md6.quizzz.service.examService.ExamService;
 import md6.quizzz.service.quizAnswerService.QuizAnswerService;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -62,8 +66,8 @@ public class RecordController {
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @Transactional
     public ResponseEntity<Record> create(@RequestBody RecordRequest recordRequest) {
-//        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Optional<AppUser> currUser = appUserService.findByUsername(principal.getName());
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<AppUser> currUser = appUserService.findByUsername(userDetails.getUsername());
         Optional<Exam> currExam = examService.findById(recordRequest.getExam().getId());
         Record record = new Record();
         record.setExam(currExam.get());
@@ -99,7 +103,7 @@ public class RecordController {
         }
 
         record.setScore(recordPoint);
-//        record.setAppUser(currUser.get());
+        record.setAppUser(currUser.get());
         recordService.save(record);
         Set<RecordAnswer> list = record.getRecordAnswers();
         recordAnswerRepository.saveAll(list);
