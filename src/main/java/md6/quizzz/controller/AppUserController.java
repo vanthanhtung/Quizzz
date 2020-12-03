@@ -9,6 +9,7 @@ import md6.quizzz.service.appUserService.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
-@PreAuthorize("hasRole('ADMIN')")
+
 public class AppUserController {
 
     final long idRoleAdmin =1;
@@ -29,12 +30,14 @@ public class AppUserController {
     @Autowired
     private AppUserService appUserService;
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping()
     public ResponseEntity<Iterable<AppUser>> findAll(){
         return new ResponseEntity<>(appUserService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<Optional<AppUser>> findById(@PathVariable Long id){
         Optional<AppUser> appUser = appUserService.findById(id);
         if (!appUser.isPresent()){
@@ -44,12 +47,14 @@ public class AppUserController {
     }
 
     @PostMapping()
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<AppUser> save(@RequestBody AppUser appUser) {
         appUserService.save(appUser);
         return new ResponseEntity<>(appUser, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
+    @Secured({"ROLE_USER"})
     public ResponseEntity<AppUser> edit(@PathVariable Long id, @RequestBody AppUser appUser){
         Optional<AppUser> currentAppUser = appUserService.findById(id);
         if (!currentAppUser.isPresent()){
@@ -67,6 +72,7 @@ public class AppUserController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @Secured({"ROLE_ADMIN"})
     public ResponseEntity<AppUser> delete(@PathVariable Long id){
         appUserService.remove(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
