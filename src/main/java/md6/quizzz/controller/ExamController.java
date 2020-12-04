@@ -51,6 +51,13 @@ public class ExamController {
     @PostMapping()
     @Secured({"ROLE_ADMIN"})
     public ResponseEntity<?> save(@Validated @RequestBody Exam exam, BindingResult bindingResult) {
+        Iterable<Exam> examIterable = examService.findAll();
+        for(Exam x: examIterable) {
+            if (x.getExam_name().trim().equals(exam.getExam_name().trim()) || x.getExam_code().trim().equals(exam.getExam_code().trim()))
+            {
+                return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            }
+        }
         if (bindingResult.hasFieldErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
