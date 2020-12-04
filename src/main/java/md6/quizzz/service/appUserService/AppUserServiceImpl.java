@@ -1,6 +1,7 @@
 package md6.quizzz.service.appUserService;
 
 import md6.quizzz.model.AppUser;
+import md6.quizzz.model.ERole;
 import md6.quizzz.model.Record;
 import md6.quizzz.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

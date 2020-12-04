@@ -48,6 +48,12 @@ public class QuizController {
 
     @PostMapping()
     public ResponseEntity<Quiz> add(@Validated @RequestBody Quiz quiz) {
+        Iterable<Quiz> quizIterable = quizService.getAll();
+        for(Quiz x: quizIterable) {
+            if (x.getContent().trim().equals(quiz.getContent().trim())) {
+                return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            }
+        }
         quizService.save(quiz);
         List<QuizAnswer> quizAnswerList = quiz.getAnswers();
         for(QuizAnswer x: quizAnswerList){
