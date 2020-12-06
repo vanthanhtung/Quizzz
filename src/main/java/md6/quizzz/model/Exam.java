@@ -38,5 +38,5 @@ public class Exam {
     @ManyToMany()
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    Set<Quiz> quizSet;
+    List<Quiz> quizSet;
 }

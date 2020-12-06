@@ -36,7 +36,7 @@ public class ExamController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Exam> exam = examService.findById(id);
         Exam currentExam = exam.get();
-        Set<Quiz> quizSet = currentExam.getQuizSet();
+        List<Quiz> quizSet = currentExam.getQuizSet();
         for(Quiz x: quizSet){
             List<QuizAnswer> quizAnswerList = x.getAnswers();
             Collections.shuffle(quizAnswerList);

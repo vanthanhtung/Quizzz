@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -71,18 +68,17 @@ public class RecordController {
         Optional<Exam> currExam = examService.findById(recordRequest.getExam().getId());
         Record record = new Record();
         record.setExam(currExam.get());
-        record.setRecordAnswers(new HashSet<>());
+        record.setRecordAnswers(new ArrayList<>());
         recordRequest.getRecordAnswer().forEach(m -> {
             QuizAnswer quizAnswer = quizAnswerService.getById(m).get();
             RecordAnswer recordAnswer = new RecordAnswer();
             recordAnswer.set_correct(quizAnswer.is_correct());
             recordAnswer.setQuiz(quizAnswer.getQuiz());
+            recordAnswer.setContent(quizAnswer.getContent());
             quizAnswer.getQuiz().getRecordAnswers().add(recordAnswer);
             record.getRecordAnswers().add(recordAnswer);
         });
 
-
-        Set<RecordAnswer> recordAnswers = record.getRecordAnswers();
         double lengthExam = currExam.get().getQuizSet().size();
         double correctCount = currExam.get().getScore() / lengthExam;
         double recordPoint = 0;
@@ -105,7 +101,7 @@ public class RecordController {
         record.setScore(recordPoint);
         record.setAppUser(currUser.get());
         recordService.save(record);
-        Set<RecordAnswer> list = record.getRecordAnswers();
+        List<RecordAnswer> list = record.getRecordAnswers();
         recordAnswerRepository.saveAll(list);
 
         return new ResponseEntity<>(record, HttpStatus.CREATED);
@@ -121,6 +117,7 @@ public class RecordController {
     @GetMapping("/{id}")
     @Secured({"ROLE_ADMIN"})
     public ResponseEntity<?> getUserExamById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(recordService.getById(id), HttpStatus.OK);
+        Record record = recordService.getById(id).get();
+        return new ResponseEntity<>(record, HttpStatus.OK);
     }
 }
