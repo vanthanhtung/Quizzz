@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +18,8 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Timestamp started_at;
-    private Timestamp finished_at;
+    private Date started_at;
+    private Date finished_at;
     private double score;
 
     @ManyToOne(fetch = FetchType.EAGER)

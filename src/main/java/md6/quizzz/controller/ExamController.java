@@ -12,10 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -36,6 +33,8 @@ public class ExamController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Exam> exam = examService.findById(id);
         Exam currentExam = exam.get();
+        currentExam.setStarted_at(new Date(System.currentTimeMillis()));
+        examService.save(currentExam);
         Set<Quiz> quizSet = currentExam.getQuizSet();
         for(Quiz x: quizSet){
             List<QuizAnswer> quizAnswerList = x.getAnswers();
