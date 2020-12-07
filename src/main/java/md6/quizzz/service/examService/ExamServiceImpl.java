@@ -57,7 +57,9 @@ public class ExamServiceImpl implements ExamService {
 
         while (realQuizList.size() < numberOfQuiz) {
             int randomIndex = (int) Math.floor(Math.random()*list.size());
-            realQuizList.add(list.get(randomIndex));
+            if (!realQuizList.contains(list.get(randomIndex))){
+                realQuizList.add(list.get(randomIndex));
+            }
         }
         currentExam.setQuizSet(realQuizList);
         return examRepository.save(currentExam);
