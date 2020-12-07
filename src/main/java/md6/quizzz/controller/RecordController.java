@@ -1,8 +1,10 @@
 package md6.quizzz.controller;
 
 import lombok.RequiredArgsConstructor;
+import md6.quizzz.dto.ExamRespon;
 import md6.quizzz.dto.LoginRequest;
 import md6.quizzz.dto.RecordRequest;
+import md6.quizzz.dto.RecordRespon;
 import md6.quizzz.model.*;
 import md6.quizzz.model.Record;
 import md6.quizzz.repository.RecordAnswerRepository;
@@ -137,7 +139,35 @@ public class RecordController {
     @Secured({"ROLE_ADMIN","ROLE_USER"})
     public ResponseEntity<?> getUserExamById(@PathVariable("id") Long id) {
         Record record = recordService.getById(id).get();
-        return new ResponseEntity<>(record, HttpStatus.OK);
+        RecordRespon recordRespon = new RecordRespon();
+        Exam exam = record.getExam();
+        ExamRespon examRespon = new ExamRespon();
+        examRespon.setDuration(exam.getDuration());
+        examRespon.setEnabled(exam.getEnabled());
+        examRespon.setExam_code(exam.getExam_code());
+        examRespon.setExam_name(exam.getExam_name());
+        examRespon.setId(exam.getId());
+        examRespon.setScore(exam.getScore());
+        examRespon.setStarted_at(exam.getStarted_at());
+
+        Set<Quiz> quizSet = exam.getQuizSet();
+        ArrayList<Quiz> quizList = new ArrayList<>();
+        for(Quiz x: quizSet){
+            quizList.add(x);
+        }
+
+        Collections.sort(quizList,Collections.reverseOrder());
+        examRespon.setQuizSet(quizList);
+
+        recordRespon.setAppUser(record.getAppUser());
+        recordRespon.setFinished_at(record.getFinished_at());
+        recordRespon.setId(record.getId());
+        recordRespon.setScore(record.getScore());
+        recordRespon.setRecordAnswers(record.getRecordAnswers());
+        recordRespon.setExamRespon(examRespon);
+        recordRespon.setStarted_at(record.getStarted_at());
+
+        return new ResponseEntity<>(recordRespon, HttpStatus.OK);
     }
 //
 //    @GetMapping("/asd/{id}")

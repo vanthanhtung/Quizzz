@@ -53,7 +53,7 @@ public class ExamServiceImpl implements ExamService {
 
         Category category = categoryRepository.findByName(examRequest.getCategory()).get();
         List<Quiz> list = (List<Quiz>) quizRepository.findByCategory(category);
-        List<Quiz> realQuizList = new ArrayList<>();
+        Set<Quiz> realQuizList = new HashSet<>();
 
         while (realQuizList.size() < numberOfQuiz) {
             int randomIndex = (int) Math.floor(Math.random()*list.size());

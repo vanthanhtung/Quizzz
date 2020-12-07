@@ -20,6 +20,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Optional<Record> getById(Long id) {
+
         return recordRepository.findById(id);
     }
 

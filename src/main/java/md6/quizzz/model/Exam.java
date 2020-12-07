@@ -6,9 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -41,5 +39,5 @@ public class Exam {
     @ManyToMany()
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    List<Quiz> quizSet;
+    Set<Quiz> quizSet;
 }
