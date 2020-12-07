@@ -32,5 +32,5 @@ public class Record {
 
     @OneToMany
     @JoinColumn(name = "record_answer_id")
-    private Set<RecordAnswer> recordAnswers;
+    private List<RecordAnswer> recordAnswers;
 }

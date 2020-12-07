@@ -35,12 +35,11 @@ public class ExamController {
         Exam currentExam = exam.get();
         currentExam.setStarted_at(new Date(System.currentTimeMillis()));
         examService.save(currentExam);
-        Set<Quiz> quizSet = currentExam.getQuizSet();
+        List<Quiz> quizSet = currentExam.getQuizSet();
         for(Quiz x: quizSet){
             List<QuizAnswer> quizAnswerList = x.getAnswers();
             Collections.shuffle(quizAnswerList);
         }
-
         if (!exam.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

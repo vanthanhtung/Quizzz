@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+
 import java.util.*;
 
 import java.sql.Timestamp;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
 
 
 @RestController
@@ -76,7 +78,7 @@ public class RecordController {
         Optional<Exam> currExam = examService.findById(recordRequest.getExam().getId());
         Record record = new Record();
         record.setExam(currExam.get());
-        record.setRecordAnswers(new HashSet<>());
+        record.setRecordAnswers(new ArrayList<>());
         recordRequest.getRecordAnswer().forEach(m -> {
             QuizAnswer quizAnswer = quizAnswerService.getById(m).get();
             RecordAnswer recordAnswer = new RecordAnswer();
@@ -87,8 +89,6 @@ public class RecordController {
             record.getRecordAnswers().add(recordAnswer);
         });
 
-
-        Set<RecordAnswer> recordAnswers = record.getRecordAnswers();
         double lengthExam = currExam.get().getQuizSet().size();
         double correctCount = currExam.get().getScore() / lengthExam;
         double recordPoint = 0;
@@ -113,7 +113,7 @@ public class RecordController {
         record.setStarted_at(currExam.get().getStarted_at());
         record.setFinished_at(new Date(System.currentTimeMillis()));
         recordService.save(record);
-        Set<RecordAnswer> list = record.getRecordAnswers();
+        List<RecordAnswer> list = record.getRecordAnswers();
         recordAnswerRepository.saveAll(list);
 
         return new ResponseEntity<>(record, HttpStatus.CREATED);
@@ -136,7 +136,8 @@ public class RecordController {
     @GetMapping("/{id}")
     @Secured({"ROLE_ADMIN","ROLE_USER"})
     public ResponseEntity<?> getUserExamById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(recordService.getById(id), HttpStatus.OK);
+        Record record = recordService.getById(id).get();
+        return new ResponseEntity<>(record, HttpStatus.OK);
     }
 //
 //    @GetMapping("/asd/{id}")

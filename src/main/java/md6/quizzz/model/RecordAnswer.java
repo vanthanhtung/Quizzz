@@ -17,12 +17,9 @@ public class RecordAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    @NotBlank
     private String content;
-
     private boolean is_correct;
+
 
 
     @ManyToOne(fetch = FetchType.EAGER)
