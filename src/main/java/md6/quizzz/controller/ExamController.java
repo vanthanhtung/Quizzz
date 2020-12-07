@@ -12,10 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -36,6 +33,8 @@ public class ExamController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Exam> exam = examService.findById(id);
         Exam currentExam = exam.get();
+        currentExam.setStarted_at(new Date(System.currentTimeMillis()));
+        examService.save(currentExam);
         Set<Quiz> quizSet = currentExam.getQuizSet();
         for(Quiz x: quizSet){
             List<QuizAnswer> quizAnswerList = x.getAnswers();
@@ -51,6 +50,13 @@ public class ExamController {
     @PostMapping()
     @Secured({"ROLE_ADMIN"})
     public ResponseEntity<?> save(@Validated @RequestBody Exam exam, BindingResult bindingResult) {
+        Iterable<Exam> examIterable = examService.findAll();
+        for(Exam x: examIterable) {
+            if (x.getExam_name().trim().equals(exam.getExam_name().trim()) || x.getExam_code().trim().equals(exam.getExam_code().trim()))
+            {
+                return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            }
+        }
         if (bindingResult.hasFieldErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
         }

@@ -23,7 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+
 import java.util.*;
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 
 @RestController
 @CrossOrigin
@@ -102,6 +110,8 @@ public class RecordController {
 
         record.setScore(recordPoint);
         record.setAppUser(currUser.get());
+        record.setStarted_at(currExam.get().getStarted_at());
+        record.setFinished_at(new Date(System.currentTimeMillis()));
         recordService.save(record);
         Set<RecordAnswer> list = record.getRecordAnswers();
         recordAnswerRepository.saveAll(list);
@@ -109,6 +119,13 @@ public class RecordController {
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }
 
+    @PostMapping("/end/{id}")
+    public ResponseEntity<?> endExam(@PathVariable Long id){
+        Record record = recordService.getById(id).get();
+        record.setFinished_at(new Date(System.currentTimeMillis()));
+        recordService.save(record);
+        return new ResponseEntity<>(record,HttpStatus.OK);
+    }
 
     @GetMapping("/getAll")
     @Secured({"ROLE_ADMIN"})

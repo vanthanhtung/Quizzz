@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,8 @@ public class Exam {
     @NotNull
     private String exam_name;
     private double score;
+
+    private Date started_at;
 
 
     @ManyToMany()
