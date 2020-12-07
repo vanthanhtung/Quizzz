@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -77,6 +74,7 @@ public class RecordController {
             RecordAnswer recordAnswer = new RecordAnswer();
             recordAnswer.set_correct(quizAnswer.is_correct());
             recordAnswer.setQuiz(quizAnswer.getQuiz());
+            recordAnswer.setContent(quizAnswer.getContent());
             quizAnswer.getQuiz().getRecordAnswers().add(recordAnswer);
             record.getRecordAnswers().add(recordAnswer);
         });
@@ -90,7 +88,7 @@ public class RecordController {
         for (Quiz quiz : currExam.get().getQuizSet()) {
             boolean onlyCorrect = quiz.getType() != 2;
             if (onlyCorrect) {
-                RecordAnswer recordAnswer = quiz.getRecordAnswers().stream().filter(m-> m.getId() == null).findFirst().get();
+                RecordAnswer recordAnswer = quiz.getRecordAnswers().stream().filter(m -> m.getId() == null).findFirst().get();
                 if (!recordAnswer.is_correct()) continue;
                 recordPoint += correctCount;
             } else {
@@ -119,8 +117,26 @@ public class RecordController {
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     public ResponseEntity<?> getUserExamById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(recordService.getById(id), HttpStatus.OK);
     }
+//
+//    @GetMapping("/asd/{id}")
+//    @Secured({"ROLE_USER"})
+//    public ResponseEntity<?> getAllRecordAnswer(@RequestBody RecordRequest recordRequest, @PathVariable Long id) {
+////        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+////        Optional<AppUser> currUser = appUserService.findByUsername(userDetails.getUsername());
+//        List<Long> list = new ArrayList<>();
+//        Optional<Record> record = recordService.getById(id);
+//
+//        for(RecordAnswer recordAnswer : record.get().getRecordAnswers()){
+//            list.add(recordAnswer.getId());
+//        }
+//        recordRequest.setRecordAnswer(list);
+//
+//
+//        return new ResponseEntity<>(recordRequest, HttpStatus.OK);
+//
+//    }
 }

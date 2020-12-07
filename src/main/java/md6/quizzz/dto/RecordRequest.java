@@ -9,4 +9,5 @@ import java.util.List;
 public class RecordRequest {
     private Exam exam;
     private List<Long> recordAnswer;
+//    private List<String> recordAnswerContent;
 }
